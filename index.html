@@ -179,31 +179,59 @@
     const message = document.getElementById("message");
 
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const optimizedCache = new Map();
 
-    function preload(list) {
-      return Promise.all(
-        list.map((src) =>
-          new Promise((resolve) => {
-            const img = new Image();
-            img.onload = resolve;
-            img.onerror = resolve;
-            img.src = src;
-          })
-        )
-      );
+    async function optimizeImage(src) {
+      if (optimizedCache.has(src)) return optimizedCache.get(src);
+
+      const task = new Promise((resolve) => {
+        const img = new Image();
+        img.decoding = "async";
+        img.onload = () => {
+          try {
+            const maxSide = 1400;
+            const ratio = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(1, Math.round(img.naturalWidth * ratio));
+            canvas.height = Math.max(1, Math.round(img.naturalHeight * ratio));
+
+            const ctx = canvas.getContext("2d", { alpha: false });
+            if (!ctx) return resolve(src);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob((blob) => {
+              if (!blob) return resolve(src);
+              resolve(URL.createObjectURL(blob));
+            }, "image/jpeg", 0.72);
+          } catch {
+            resolve(src);
+          }
+        };
+        img.onerror = () => resolve(src);
+        img.src = src;
+      });
+
+      optimizedCache.set(src, task);
+      return task;
+    }
+
+    function warmupImages(list) {
+      list.forEach((src) => {
+        optimizeImage(src);
+      });
     }
 
     async function show(src, holdMs) {
       photo.classList.remove("show");
       await sleep(90);
-      photo.src = src;
+      photo.src = await optimizeImage(src);
       photo.classList.add("show");
       await sleep(holdMs);
     }
 
     async function startFlow() {
       startBtn.disabled = true;
-      await preload([...sequence, finalImage]);
+      warmupImages([...sequence.slice(1), finalImage]);
 
       startBtn.style.display = "none";
       stage.style.display = "block";
