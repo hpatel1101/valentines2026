@@ -1,29 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine?</title>
+
 <style>
   body{
-    margin:0; font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-    background:#ffb6c1; text-align:center; overflow:hidden;
+    margin:0;
+    font-family:-apple-system, BlinkMacSystemFont, "Apple Color Emoji","Segoe UI Emoji", sans-serif;
+    background:#ffb6c1;
+    text-align:center;
+    overflow:hidden;
   }
+
   #startBtn{
-    margin-top:40vh; padding:20px 28px; font-size:22px;
-    border:none; border-radius:16px; background:#ff2e63; color:#fff;
+    margin-top:40vh;
+    padding:20px 28px;
+    font-size:22px;
+    border:none;
+    border-radius:16px;
+    background:#ff2e63;
+    color:#fff;
   }
-  .fly{ position:absolute; width:90px; animation:flyAway 1.0s linear forwards; }
-  @keyframes flyAway{
-    from{ transform:translate(0,0) rotate(0deg); opacity:1; }
-    to{ transform:translate(var(--x), var(--y)) rotate(900deg); opacity:0; }
+
+  /* BIG, clean photos */
+  .fly{
+    position:absolute;
+    width:260px;              /* <-- BIGGER */
+    max-width:70vw;           /* keeps it nice on small screens */
+    height:auto;
+    border-radius:18px;
+    box-shadow: 0 14px 30px rgba(0,0,0,.22);
+    opacity: 0;
+    transform: translate(0,0) scale(0.98);
+    will-change: transform, opacity;
+    animation: driftAway 3.4s ease-in-out forwards;  /* <-- SLOWER */
   }
-  #question{ display:none; margin-top:28vh; }
-  #me{ width:220px; border-radius:20px; margin-top:18px; }
+
+  /* No spinning. Gentle fade in, glide, fade out */
+  @keyframes driftAway{
+    0%   { opacity:0; transform: translate(0,0) scale(0.98); }
+    12%  { opacity:1; transform: translate(0,0) scale(1.00); }
+    85%  { opacity:1; transform: translate(var(--x), var(--y)) scale(1.00); }
+    100% { opacity:0; transform: translate(var(--x), var(--y)) scale(0.98); }
+  }
+
+  #question{
+    display:none;
+    margin-top:26vh;
+    padding: 0 18px;
+  }
+
+  h1{
+    margin:0;
+    font-size:38px;
+    color:#1a1a1a;
+    text-shadow: 0 2px 0 rgba(255,255,255,.25);
+  }
+
+  #me{
+    width:240px;
+    border-radius:22px;
+    margin-top:18px;
+    box-shadow: 0 14px 30px rgba(0,0,0,.22);
+  }
 </style>
 </head>
+
 <body>
 
-<button id="startBtn" onclick="start()">Hardik wants you to click here ❤️</button>
+<button id="startBtn">Hardik wants you to click here ❤️</button>
 
 <div id="question">
   <h1>Will you be my Valentine? 💘</h1>
@@ -31,22 +78,59 @@
 </div>
 
 <script>
+/* Tune these if you want:
+   - BIGGER images: increase IMG_WIDTH
+   - SLOWER: increase DURATION_MS and GAP_MS
+*/
+const TOTAL = 10;        // how many photos float by
+const GAP_MS = 600;      // time between each photo (bigger = slower sequence)
+const DURATION_MS = 3400;
+
+document.getElementById("startBtn").addEventListener("click", start, { once:true });
+
 function start(){
-  document.getElementById("startBtn").style.display="none";
+  document.getElementById("startBtn").style.display = "none";
 
-  for(let i=0;i<20;i++){
-    const img=document.createElement("img");
-    img.src="pic"+((i%5)+1)+".jpg";
-    img.className="fly";
-    img.style.left=(Math.random()*window.innerWidth)+"px";
-    img.style.top=(Math.random()*window.innerHeight)+"px";
-    img.style.setProperty("--x",(Math.random()*1000-500)+"px");
-    img.style.setProperty("--y",(Math.random()*1000-500)+"px");
-    document.body.appendChild(img);
-  }
+  let i = 0;
+  const timer = setInterval(() => {
+    spawnOne(i);
+    i++;
+    if (i >= TOTAL) {
+      clearInterval(timer);
+      // show question after the last photo has had a moment
+      setTimeout(() => {
+        document.getElementById("question").style.display = "block";
+      }, 900);
+    }
+  }, GAP_MS);
+}
 
-  setTimeout(()=>{ document.getElementById("question").style.display="block"; }, 1100);
+function spawnOne(i){
+  const img = document.createElement("img");
+  img.src = "pic" + ((i % 5) + 1) + ".jpg";
+  img.className = "fly";
+
+  // Start near center so you can SEE it clearly
+  const startX = window.innerWidth * 0.5;
+  const startY = window.innerHeight * 0.48;
+
+  // Center the image around start point
+  img.style.left = (startX - 130) + "px";  // 130 = half of 260px width
+  img.style.top  = (startY - 90) + "px";
+
+  // Gentle outward drift (not insane distances)
+  const driftX = (Math.random() * 520 - 260);   // -260 to +260
+  const driftY = (Math.random() * 520 - 260);
+
+  img.style.setProperty("--x", driftX + "px");
+  img.style.setProperty("--y", driftY + "px");
+
+  document.body.appendChild(img);
+
+  // Cleanup
+  setTimeout(() => img.remove(), DURATION_MS + 100);
 }
 </script>
+
 </body>
 </html>
