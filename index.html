@@ -113,7 +113,7 @@
 
 <div id="startWrap">
   <button id="startBtn" aria-describedby="hint">Hardik wants you to click here ❤️</button>
-  <p id="hint">P.S. It gets cute in 3…2…1 ✨</p>
+  <p id="hint"></p>
 </div>
 
 <div id="question" aria-live="polite">
@@ -181,6 +181,48 @@ function spawnOne(i){
 
   document.body.appendChild(img);
   setTimeout(() => img.remove(), DURATION_MS + 100);
+}
+
+function dodgeNo(){
+  noCount++;
+  response.textContent = NO_TEXTS[(noCount - 1) % NO_TEXTS.length];
+  response.classList.remove("shake");
+  void response.offsetWidth;
+  response.classList.add("shake");
+
+  const maxX = Math.max(window.innerWidth - noBtn.offsetWidth - 20, 20);
+  const maxY = Math.max(window.innerHeight - noBtn.offsetHeight - 20, 20);
+  noBtn.style.position = "fixed";
+  noBtn.style.left = `${Math.random() * (maxX - 20) + 10}px`;
+  noBtn.style.top = `${Math.random() * (maxY - 20) + 10}px`;
+}
+
+function sayYes(){
+  response.textContent = "YAYYY! Best decision ever 🥹💘";
+  noBtn.style.display = "none";
+  yesBtn.textContent = "My Valentine ✅";
+  yesBtn.disabled = true;
+  yesBtn.style.opacity = ".9";
+
+  for (let i = 0; i < 16; i++) {
+    setTimeout(() => burstHeart(), i * 90);
+  }
+}
+
+function burstHeart(){
+  const heart = document.createElement("span");
+  heart.className = "heart-burst";
+  heart.textContent = ["💖", "💘", "💞", "❤️"][Math.floor(Math.random() * 4)];
+
+  const x = window.innerWidth * (0.3 + Math.random() * 0.4);
+  const y = window.innerHeight * (0.25 + Math.random() * 0.4);
+  heart.style.left = `${x}px`;
+  heart.style.top = `${y}px`;
+  heart.style.setProperty("--tx", `${(Math.random() * 220) - 110}px`);
+  heart.style.setProperty("--ty", `${-120 - Math.random() * 140}px`);
+
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 1250);
 }
 </script>
 
