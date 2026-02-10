@@ -1,216 +1,240 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>💘</title>
-
-<style>
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-    background:#fff;
-    display:grid;
-    place-items:center;
-  }
-
-  .container{
-    width:min(520px, 92vw);
-    text-align:center;
-    padding:22px;
-  }
-
-  .btnStart{
-    border:none;
-    background:#111;
-    color:#fff;
-    font-weight:700;
-    font-size:18px;
-    padding:14px 18px;
-    border-radius:14px;
-  }
-  .btnStart:active{ transform:scale(.98); }
-
-  .frame{
-    margin:18px auto 0;
-    width:min(420px, 90vw);
-    aspect-ratio: 4 / 5;
-    border-radius:22px;
-    overflow:hidden;
-    background:#f3f3f3;
-    box-shadow:0 18px 50px rgba(0,0,0,.12);
-    position:relative;
-  }
-
-  .photo{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    opacity:0;
-    transform:scale(1.02);
-    transition: opacity 900ms ease, transform 1200ms ease;
-  }
-  .photo.show{
-    opacity:1;
-    transform:scale(1);
-  }
-  .photo.fadeOut{
-    opacity:0;
-    transform:scale(1.02);
-  }
-
-  .final{
-    display:none;
-    margin-top:18px;
-  }
-  .question{
-    margin:18px 0 14px;
-    font-size:34px;
-    line-height:1.1;
-    font-weight:800;
-    letter-spacing:-.4px;
-    color:#111;
-  }
-
-  .me{
-    width:min(320px, 80vw);
-    border-radius:22px;
-    box-shadow:0 18px 50px rgba(0,0,0,.12);
-    margin:10px auto 18px;
-    display:block;
-  }
-
-  .row{
-    display:flex;
-    gap:12px;
-    justify-content:center;
-  }
-  .choice{
-    border:none;
-    border-radius:14px;
-    padding:14px 18px;
-    font-size:18px;
-    font-weight:800;
-    min-width:120px;
-  }
-  .yes{ background:#16a34a; color:#fff; }
-  .no{ background:#ef4444; color:#fff; }
-
-  .result{
-    margin-top:14px;
-    font-size:18px;
-    font-weight:700;
-    color:#111;
-    min-height:24px;
-  }
-
-  .hint{
-    margin-top:10px;
-    font-size:13px;
-    color:#666;
-  }
-</style>
-</head>
-
-<body>
-  <div class="container">
-    <button id="start" class="btnStart">Hardik wants you to click here 💘</button>
-    <div class="hint" id="hint">make sure your images are named pic1.jpg … pic5.jpg and me.jpg</div>
-
-    <div class="frame" id="frame" aria-label="slideshow frame">
-      <img id="img" class="photo" alt="memory">
-    </div>
-
-    <div class="final" id="final">
-      <div class="question">Will you be my Valentine?</div>
-      <img class="me" src="me.jpg" alt="Hardik">
-
-      <div class="row">
-        <button id="yesBtn" class="choice yes">Yes</button>
-        <button id="noBtn" class="choice no">No</button>
-      </div>
-
-      <div class="result" id="result"></div>
-    </div>
-  </div>
-
-<script>
-  const pics = ["pic1.jpg","pic2.jpg","pic3.jpg","pic4.jpg","pic5.jpg"];
-  const img = document.getElementById("img");
-  const startBtn = document.getElementById("start");
-  const hint = document.getElementById("hint");
-  const final = document.getElementById("final");
-  const result = document.getElementById("result");
-
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn  = document.getElementById("noBtn");
-
-  // timings (ms): fade in/out + pause
-  const fadeIn  = 900;
-  const hold    = 1200;
-  const fadeOut = 900;
-
-  function preload(list){
-    return Promise.all(list.map(src => new Promise(res=>{
-      const im = new Image();
-      im.onload = () => res(true);
-      im.onerror = () => res(true);
-      im.src = src;
-    })));
-  }
-
-  function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
-
-  async function play(){
-    startBtn.disabled = true;
-    startBtn.textContent = "Loading…";
-    hint.style.display = "none";
-
-    await preload([...pics, "me.jpg"]);
-
-    startBtn.style.display = "none";
-
-    for(const src of pics){
-      img.src = src;
-
-      // fade in
-      img.classList.remove("fadeOut");
-      await sleep(40);
-      img.classList.add("show");
-      await sleep(fadeIn + hold);
-
-      // fade out
-      img.classList.add("fadeOut");
-      img.classList.remove("show");
-      await sleep(fadeOut);
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Valentine</title>
+  <style>
+    :root {
+      --bg-start: #1a1020;
+      --bg-end: #090a0f;
+      --card: rgba(255, 255, 255, 0.09);
+      --text: #ffffff;
+      --yes: #23c766;
+      --no: #ff3b5c;
     }
 
-    // final screen
-    final.style.display = "block";
-  }
+    * { box-sizing: border-box; }
 
-  startBtn.addEventListener("click", play);
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 50% -10%, #3a1f46 0%, transparent 45%),
+        linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 80%);
+    }
 
-  function accept(){
-    result.textContent = "Yay 💘 See you on Valentine’s 🙂";
-    // optionally disable after
-    yesBtn.disabled = true;
-    noBtn.disabled = true;
-    noBtn.textContent = "Yes";
-    noBtn.className = "choice yes";
-  }
+    body {
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
 
-  yesBtn.addEventListener("click", accept);
+    .app {
+      width: min(430px, 100%);
+      text-align: center;
+    }
 
-  // “No” becomes “Yes”
-  noBtn.addEventListener("click", () => {
-    noBtn.textContent = "Yes";
-    noBtn.className = "choice yes";
-    accept();
-  });
-</script>
+    #startBtn {
+      width: 100%;
+      min-height: 96px;
+      border: 0;
+      border-radius: 20px;
+      padding: 18px;
+      font-size: clamp(1.2rem, 4.7vw, 1.5rem);
+      font-weight: 750;
+      letter-spacing: 0.01em;
+      color: #fff;
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 180ms ease;
+    }
+
+    #startBtn:active { transform: scale(0.98); }
+
+    #stage {
+      display: none;
+      width: 100%;
+    }
+
+    .frame {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      margin-top: 14px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      background: #11131a;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    #photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.04);
+      transition: opacity 650ms ease, transform 650ms ease;
+      will-change: transform, opacity;
+    }
+
+    #photo.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #qa {
+      display: none;
+      margin-top: 14px;
+    }
+
+    #question {
+      margin: 0 0 14px;
+      font-size: clamp(1.5rem, 7vw, 2rem);
+      line-height: 1.1;
+      font-weight: 850;
+      letter-spacing: -0.01em;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      min-width: 120px;
+      padding: 12px 20px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 730;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 180ms ease, background-color 220ms ease;
+    }
+
+    .btn:active { transform: scale(0.97); }
+    #yesBtn { background: var(--yes); }
+    #noBtn { background: var(--no); }
+
+    #noBtn.switching {
+      animation: noToYes 420ms ease;
+      background: var(--yes);
+    }
+
+    @keyframes noToYes {
+      0% { transform: translateY(0) scale(1) rotate(0deg); }
+      45% { transform: translateY(-3px) scale(0.9) rotate(-7deg); }
+      100% { transform: translateY(0) scale(1) rotate(0deg); }
+    }
+
+    #message {
+      min-height: 26px;
+      margin-top: 12px;
+      font-size: 1.02rem;
+      font-weight: 650;
+      color: rgba(255, 255, 255, 0.93);
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <button id="startBtn">Hardik wants you to click here</button>
+
+    <section id="stage" aria-live="polite">
+      <div class="frame">
+        <img id="photo" alt="memory" />
+      </div>
+
+      <div id="qa">
+        <h1 id="question">Will you be my Valentine?</h1>
+        <div class="actions">
+          <button id="yesBtn" class="btn">Yes</button>
+          <button id="noBtn" class="btn">No</button>
+        </div>
+        <div id="message"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const sequence = ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg"];
+    const finalImage = "me.jpg";
+
+    const startBtn = document.getElementById("startBtn");
+    const stage = document.getElementById("stage");
+    const photo = document.getElementById("photo");
+    const qa = document.getElementById("qa");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const message = document.getElementById("message");
+
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    function preload(list) {
+      return Promise.all(
+        list.map((src) =>
+          new Promise((resolve) => {
+            const img = new Image();
+            img.onload = resolve;
+            img.onerror = resolve;
+            img.src = src;
+          })
+        )
+      );
+    }
+
+    async function show(src, holdMs) {
+      photo.classList.remove("show");
+      await sleep(90);
+      photo.src = src;
+      photo.classList.add("show");
+      await sleep(holdMs);
+    }
+
+    async function startFlow() {
+      startBtn.disabled = true;
+      await preload([...sequence, finalImage]);
+
+      startBtn.style.display = "none";
+      stage.style.display = "block";
+
+      for (const src of sequence) {
+        await show(src, 1050);
+      }
+
+      await show(finalImage, 380);
+      qa.style.display = "block";
+    }
+
+    function onYes() {
+      message.textContent = "aw, thanks to my fav person in the whole world!";
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+    }
+
+    function onNo() {
+      noBtn.disabled = true;
+      noBtn.classList.add("switching");
+      noBtn.textContent = "Yes";
+      message.textContent = "ur stuck with a yes only";
+      setTimeout(() => {
+        yesBtn.disabled = true;
+      }, 120);
+    }
+
+    startBtn.addEventListener("click", startFlow);
+    yesBtn.addEventListener("click", onYes);
+    noBtn.addEventListener("click", onNo);
+  </script>
 </body>
 </html>
