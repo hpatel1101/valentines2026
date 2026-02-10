@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine?</title>
+<style>
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    background:#ffb6c1; text-align:center; overflow:hidden;
+  }
+  #startBtn{
+    margin-top:40vh; padding:20px 28px; font-size:22px;
+    border:none; border-radius:16px; background:#ff2e63; color:#fff;
+  }
+  .fly{ position:absolute; width:90px; animation:flyAway 1.0s linear forwards; }
+  @keyframes flyAway{
+    from{ transform:translate(0,0) rotate(0deg); opacity:1; }
+    to{ transform:translate(var(--x), var(--y)) rotate(900deg); opacity:0; }
+  }
+  #question{ display:none; margin-top:28vh; }
+  #me{ width:220px; border-radius:20px; margin-top:18px; }
+</style>
+</head>
+<body>
+
+<button id="startBtn" onclick="start()">Hardik wants you to click here ❤️</button>
+
+<div id="question">
+  <h1>Will you be my Valentine? 💘</h1>
+  <img id="me" src="me.jpg" alt="me">
+</div>
+
+<script>
+function start(){
+  document.getElementById("startBtn").style.display="none";
+
+  for(let i=0;i<20;i++){
+    const img=document.createElement("img");
+    img.src="pic"+((i%5)+1)+".jpg";
+    img.className="fly";
+    img.style.left=(Math.random()*window.innerWidth)+"px";
+    img.style.top=(Math.random()*window.innerHeight)+"px";
+    img.style.setProperty("--x",(Math.random()*1000-500)+"px");
+    img.style.setProperty("--y",(Math.random()*1000-500)+"px");
+    document.body.appendChild(img);
+  }
+
+  setTimeout(()=>{ document.getElementById("question").style.display="block"; }, 1100);
+}
+</script>
+</body>
+</html>
