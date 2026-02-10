@@ -1,136 +1,250 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Valentine?</title>
 
 <style>
+  :root{
+    --bg1:#ffb6c1;
+    --bg2:#ffd1dc;
+    --accent:#ff2e63;
+    --text:#1a1a1a;
+  }
+
   body{
     margin:0;
     font-family:-apple-system, BlinkMacSystemFont, "Apple Color Emoji","Segoe UI Emoji", sans-serif;
-    background:#ffb6c1;
-    text-align:center;
+    background: radial-gradient(1200px 700px at 50% 35%, var(--bg2), var(--bg1));
     overflow:hidden;
+    text-align:center;
+  }
+
+  /* soft moving glow */
+  .glow{
+    position:fixed;
+    inset:-30%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 55%),
+                radial-gradient(circle at 70% 60%, rgba(255,255,255,.25), transparent 55%),
+                radial-gradient(circle at 50% 85%, rgba(255,255,255,.20), transparent 60%);
+    filter: blur(18px);
+    animation: driftGlow 10s ease-in-out infinite alternate;
+    pointer-events:none;
+    z-index:0;
+  }
+  @keyframes driftGlow{
+    from{ transform: translate(-2%, -1%) scale(1.02); opacity:.95; }
+    to  { transform: translate(2%, 1%)  scale(1.06); opacity:1; }
+  }
+
+  #startWrap{
+    position:relative;
+    z-index:2;
+    margin-top:40vh;
   }
 
   #startBtn{
-    margin-top:40vh;
     padding:20px 28px;
     font-size:22px;
     border:none;
-    border-radius:16px;
-    background:#ff2e63;
-    color:#fff;
-  }
-
-  /* BIG, clean photos */
-  .fly{
-    position:absolute;
-    width:260px;              /* <-- BIGGER */
-    max-width:70vw;           /* keeps it nice on small screens */
-    height:auto;
     border-radius:18px;
-    box-shadow: 0 14px 30px rgba(0,0,0,.22);
-    opacity: 0;
-    transform: translate(0,0) scale(0.98);
+    background: linear-gradient(180deg, #ff4b7a, var(--accent));
+    color:#fff;
+    box-shadow: 0 18px 36px rgba(0,0,0,.18);
+    transform: translateY(0);
+    transition: transform .18s ease, filter .18s ease;
+  }
+  #startBtn:active{ transform: translateY(2px); filter: brightness(.98); }
+
+  /* floating hearts layer */
+  #hearts{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+  }
+  .heart{
+    position:absolute;
+    font-size:22px;
+    opacity:.0;
+    filter: drop-shadow(0 8px 12px rgba(0,0,0,.12));
+    animation: floatUp linear forwards;
+  }
+  @keyframes floatUp{
+    0%   { transform: translateY(30px) scale(.9); opacity:0; }
+    10%  { opacity:.9; }
+    90%  { opacity:.9; }
+    100% { transform: translateY(-120vh) scale(1.2); opacity:0; }
+  }
+
+  /* big photo parade */
+  .photo{
+    position:fixed;
+    width:min(320px, 78vw);
+    border-radius:22px;
+    box-shadow: 0 20px 46px rgba(0,0,0,.22);
+    opacity:0;
+    transform: translateX(-120vw) scale(.98);
     will-change: transform, opacity;
-    animation: driftAway 3.4s ease-in-out forwards;  /* <-- SLOWER */
+    z-index:3;
+    animation: glide 4.2s ease-in-out forwards;
+  }
+  @keyframes glide{
+    0%   { opacity:0; transform: translateX(-120vw) scale(.98); }
+    12%  { opacity:1; }
+    50%  { opacity:1; }
+    88%  { opacity:1; }
+    100% { opacity:0; transform: translateX(120vw) scale(1.01); }
   }
 
-  /* No spinning. Gentle fade in, glide, fade out */
-  @keyframes driftAway{
-    0%   { opacity:0; transform: translate(0,0) scale(0.98); }
-    12%  { opacity:1; transform: translate(0,0) scale(1.00); }
-    85%  { opacity:1; transform: translate(var(--x), var(--y)) scale(1.00); }
-    100% { opacity:0; transform: translate(var(--x), var(--y)) scale(0.98); }
+  /* sparkles burst */
+  .spark{
+    position:fixed;
+    width:10px; height:10px;
+    border-radius:50%;
+    background: rgba(255,255,255,.95);
+    box-shadow: 0 0 18px rgba(255,255,255,.85);
+    pointer-events:none;
+    z-index:4;
+    opacity:0;
+    animation: spark 900ms ease-out forwards;
+  }
+  @keyframes spark{
+    0%   { opacity:0; transform: translate(0,0) scale(.6); }
+    12%  { opacity:1; }
+    100% { opacity:0; transform: translate(var(--x), var(--y)) scale(1.1); }
   }
 
+  /* question reveal */
   #question{
+    position:relative;
+    z-index:5;
     display:none;
-    margin-top:26vh;
+    margin-top:22vh;
     padding: 0 18px;
+    color: var(--text);
+  }
+  #question.show{
+    display:block;
+    animation: popIn 650ms cubic-bezier(.2,.9,.2,1) both;
+  }
+  @keyframes popIn{
+    from{ opacity:0; transform: translateY(18px) scale(.98); }
+    to  { opacity:1; transform: translateY(0) scale(1); }
   }
 
   h1{
     margin:0;
     font-size:38px;
-    color:#1a1a1a;
-    text-shadow: 0 2px 0 rgba(255,255,255,.25);
+    text-shadow: 0 2px 0 rgba(255,255,255,.22);
   }
 
   #me{
-    width:240px;
-    border-radius:22px;
+    width:min(260px, 70vw);
+    border-radius:24px;
     margin-top:18px;
-    box-shadow: 0 14px 30px rgba(0,0,0,.22);
+    box-shadow: 0 18px 40px rgba(0,0,0,.22);
   }
 </style>
 </head>
 
 <body>
+  <div class="glow"></div>
+  <div id="hearts"></div>
 
-<button id="startBtn">Hardik wants you to click here ❤️</button>
+  <div id="startWrap">
+    <button id="startBtn">Hardik wants you to click here ❤️</button>
+  </div>
 
-<div id="question">
-  <h1>Will you be my Valentine? 💘</h1>
-  <img id="me" src="me.jpg" alt="me">
-</div>
+  <div id="question">
+    <h1>Will you be my Valentine? 💘</h1>
+    <img id="me" src="me.jpg" alt="me">
+  </div>
 
 <script>
-/* Tune these if you want:
-   - BIGGER images: increase IMG_WIDTH
-   - SLOWER: increase DURATION_MS and GAP_MS
-*/
-const TOTAL = 10;        // how many photos float by
-const GAP_MS = 600;      // time between each photo (bigger = slower sequence)
-const DURATION_MS = 3400;
+  const startBtn = document.getElementById("startBtn");
+  const startWrap = document.getElementById("startWrap");
+  const question = document.getElementById("question");
+  const heartsLayer = document.getElementById("hearts");
 
-document.getElementById("startBtn").addEventListener("click", start, { once:true });
+  // Start floating hearts immediately (nice ambience)
+  let heartsTimer = setInterval(spawnHeart, 320);
 
-function start(){
-  document.getElementById("startBtn").style.display = "none";
+  function spawnHeart(){
+    const h = document.createElement("div");
+    h.className = "heart";
+    const hearts = ["💗","💖","💘","💕"];
+    h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
 
-  let i = 0;
-  const timer = setInterval(() => {
-    spawnOne(i);
-    i++;
-    if (i >= TOTAL) {
-      clearInterval(timer);
-      // show question after the last photo has had a moment
-      setTimeout(() => {
-        document.getElementById("question").style.display = "block";
-      }, 900);
+    const left = Math.random() * 100;
+    h.style.left = left + "vw";
+    h.style.bottom = "-40px";
+
+    const size = 18 + Math.random()*18;
+    h.style.fontSize = size + "px";
+
+    const dur = 5.5 + Math.random()*3.5; // 5.5s–9s
+    h.style.animationDuration = dur + "s";
+
+    heartsLayer.appendChild(h);
+    // cleanup
+    setTimeout(()=> h.remove(), (dur*1000) + 200);
+  }
+
+  startBtn.addEventListener("click", () => {
+    // hide button area smoothly
+    startWrap.style.display = "none";
+
+    sparkleBurst();
+
+    // "photo parade" — one-by-one, slightly different vertical positions
+    const totalPhotos = 10;
+    const gap = 520; // slower / nicer
+    for(let i=0;i<totalPhotos;i++){
+      setTimeout(()=> spawnPhoto(i), i * gap);
     }
-  }, GAP_MS);
-}
 
-function spawnOne(i){
-  const img = document.createElement("img");
-  img.src = "pic" + ((i % 5) + 1) + ".jpg";
-  img.className = "fly";
+    // reveal question near end
+    setTimeout(()=>{
+      question.classList.add("show");
+    }, totalPhotos*gap + 300);
+  }, { once:true });
 
-  // Start near center so you can SEE it clearly
-  const startX = window.innerWidth * 0.5;
-  const startY = window.innerHeight * 0.48;
+  function spawnPhoto(i){
+    const img = document.createElement("img");
+    img.className = "photo";
+    img.src = "pic" + ((i % 5) + 1) + ".jpg";
 
-  // Center the image around start point
-  img.style.left = (startX - 130) + "px";  // 130 = half of 260px width
-  img.style.top  = (startY - 90) + "px";
+    // pick a pleasant vertical lane (avoid the very top/bottom)
+    const lanes = [18, 28, 38, 48, 58, 68];
+    const top = lanes[Math.floor(Math.random()*lanes.length)];
+    img.style.top = top + "vh";
 
-  // Gentle outward drift (not insane distances)
-  const driftX = (Math.random() * 520 - 260);   // -260 to +260
-  const driftY = (Math.random() * 520 - 260);
+    document.body.appendChild(img);
+    setTimeout(()=> img.remove(), 4300);
+  }
 
-  img.style.setProperty("--x", driftX + "px");
-  img.style.setProperty("--y", driftY + "px");
+  function sparkleBurst(){
+    // burst around center area
+    const cx = window.innerWidth * 0.5;
+    const cy = window.innerHeight * 0.45;
 
-  document.body.appendChild(img);
+    for(let i=0;i<18;i++){
+      const s = document.createElement("div");
+      s.className = "spark";
+      s.style.left = (cx + (Math.random()*60 - 30)) + "px";
+      s.style.top  = (cy + (Math.random()*60 - 30)) + "px";
 
-  // Cleanup
-  setTimeout(() => img.remove(), DURATION_MS + 100);
-}
+      const x = (Math.random()*520 - 260) + "px";
+      const y = (Math.random()*520 - 260) + "px";
+      s.style.setProperty("--x", x);
+      s.style.setProperty("--y", y);
+
+      document.body.appendChild(s);
+      setTimeout(()=> s.remove(), 1000);
+    }
+  }
 </script>
-
 </body>
 </html>
