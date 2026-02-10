@@ -1,95 +1,245 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine?</title>
 
 <style>
+  :root{
+    --pink-bg:#ffb6c1;
+    --btn:#ff2e63;
+    --btn-yes:#2ecc71;
+    --btn-no:#3b3b45;
+    --text:#1a1a1a;
+    --photo-size:260px;
+    --photo-radius:18px;
+    --soft-shadow:0 14px 30px rgba(0,0,0,.22);
+  }
+
+  *{ box-sizing:border-box; }
+
   body{
     margin:0;
+    min-height:100vh;
     font-family:-apple-system, BlinkMacSystemFont, "Apple Color Emoji","Segoe UI Emoji", sans-serif;
-    background:#ffb6c1;
+    background:radial-gradient(circle at 50% -15%, #ffd6e0 0%, var(--pink-bg) 45%, #ff9fb4 100%);
     text-align:center;
     overflow:hidden;
+    color:var(--text);
+  }
+
+  #startWrap{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    padding:24px;
   }
 
   #startBtn{
-    margin-top:40vh;
     padding:20px 28px;
-    font-size:22px;
+    font-size:clamp(1.05rem, 2.5vw, 1.35rem);
+    font-weight:700;
     border:none;
     border-radius:16px;
-    background:#ff2e63;
+    background:var(--btn);
     color:#fff;
+    box-shadow:0 10px 24px rgba(255,46,99,.35);
+    cursor:pointer;
+    transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
   }
 
-  /* BIG, clean photos */
+  #startBtn:hover{
+    transform:translateY(-1px) scale(1.01);
+    box-shadow:0 14px 30px rgba(255,46,99,.42);
+    filter:saturate(1.05);
+  }
+
+  #startBtn:active{ transform:translateY(1px) scale(0.99); }
+  #startBtn:focus-visible{ outline:3px solid #fff; outline-offset:4px; }
+
   .fly{
     position:absolute;
-    width:260px;              /* <-- BIGGER */
-    max-width:70vw;           /* keeps it nice on small screens */
+    width:var(--photo-size);
+    max-width:70vw;
     height:auto;
-    border-radius:18px;
-    box-shadow: 0 14px 30px rgba(0,0,0,.22);
-    opacity: 0;
-    transform: translate(0,0) scale(0.98);
-    will-change: transform, opacity;
-    animation: driftAway 3.4s ease-in-out forwards;  /* <-- SLOWER */
+    border-radius:var(--photo-radius);
+    box-shadow:var(--soft-shadow);
+    opacity:0;
+    transform:translate(0,0) scale(.98);
+    will-change:transform, opacity;
+    animation:driftAway 3.4s ease-in-out forwards;
   }
 
-  /* No spinning. Gentle fade in, glide, fade out */
   @keyframes driftAway{
-    0%   { opacity:0; transform: translate(0,0) scale(0.98); }
-    12%  { opacity:1; transform: translate(0,0) scale(1.00); }
-    85%  { opacity:1; transform: translate(var(--x), var(--y)) scale(1.00); }
-    100% { opacity:0; transform: translate(var(--x), var(--y)) scale(0.98); }
+    0%   { opacity:0; transform:translate(0,0) scale(.98); }
+    12%  { opacity:1; transform:translate(0,0) scale(1); }
+    85%  { opacity:1; transform:translate(var(--x), var(--y)) scale(1); }
+    100% { opacity:0; transform:translate(var(--x), var(--y)) scale(.98); }
   }
 
   #question{
     display:none;
-    margin-top:26vh;
-    padding: 0 18px;
+    min-height:100vh;
+    padding:14vh 18px 40px;
+    position:relative;
+  }
+
+  .card{
+    width:min(520px, 92vw);
+    margin:0 auto;
+    background:rgba(255,255,255,.42);
+    backdrop-filter: blur(4px);
+    border-radius:24px;
+    padding:22px 18px 24px;
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
+    animation:fadeUp .5s ease;
+  }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
   }
 
   h1{
     margin:0;
-    font-size:38px;
-    color:#1a1a1a;
-    text-shadow: 0 2px 0 rgba(255,255,255,.25);
+    font-size:clamp(2rem, 5vw, 2.45rem);
+    line-height:1.2;
+    text-shadow:0 2px 0 rgba(255,255,255,.25);
   }
 
   #me{
-    width:240px;
+    width:min(250px, 72vw);
     border-radius:22px;
     margin-top:18px;
-    box-shadow: 0 14px 30px rgba(0,0,0,.22);
+    box-shadow:var(--soft-shadow);
+  }
+
+  #hint{
+    margin:12px 0 0;
+    font-size:.96rem;
+    opacity:.78;
+  }
+
+  .actions{
+    margin-top:18px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    position:relative;
+    min-height:54px;
+  }
+
+  .v-btn{
+    border:none;
+    border-radius:999px;
+    padding:12px 20px;
+    font-size:1rem;
+    font-weight:700;
+    color:white;
+    cursor:pointer;
+    box-shadow:0 8px 16px rgba(0,0,0,.15);
+    transition:transform .15s ease, filter .15s ease;
+  }
+
+  .v-btn:hover{ transform:translateY(-1px); filter:brightness(1.06); }
+  .v-btn:active{ transform:translateY(1px); }
+  #yesBtn{ background:var(--btn-yes); }
+  #noBtn{ background:var(--btn-no); }
+
+  #response{
+    min-height:1.5em;
+    margin-top:14px;
+    font-weight:700;
+    font-size:1.03rem;
+  }
+
+  .shake{ animation:shake .25s linear; }
+  @keyframes shake{
+    0%{ transform:translateX(0); }
+    25%{ transform:translateX(-6px); }
+    50%{ transform:translateX(6px); }
+    75%{ transform:translateX(-4px); }
+    100%{ transform:translateX(0); }
+  }
+
+  .heart-burst{
+    position:absolute;
+    font-size:26px;
+    pointer-events:none;
+    animation:burst 1.2s ease-out forwards;
+  }
+
+  @keyframes burst{
+    0%{ opacity:0; transform:translate(-50%, -50%) scale(.5); }
+    20%{ opacity:1; }
+    100%{ opacity:0; transform:translate(var(--tx), var(--ty)) scale(1.15); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .fly, .card, .shake, .heart-burst{ animation-duration:1ms !important; }
+    #startBtn, .v-btn{ transition:none; }
   }
 </style>
 </head>
 
 <body>
 
-<button id="startBtn">Hardik wants you to click here ❤️</button>
+<div id="startWrap">
+  <button id="startBtn" aria-describedby="hint">Hardik wants you to click here ❤️</button>
+  <p id="hint">P.S. It gets cute in 3…2…1 ✨</p>
+</div>
 
-<div id="question">
-  <h1>Will you be my Valentine? 💘</h1>
-  <img id="me" src="me.jpg" alt="me">
+<div id="question" aria-live="polite">
+  <div class="card">
+    <h1>Will you be my Valentine? 💘</h1>
+    <img id="me" src="me.jpg" alt="Photo of me smiling">
+
+    <div class="actions">
+      <button class="v-btn" id="yesBtn">Yes 💖</button>
+      <button class="v-btn" id="noBtn">No 🙈</button>
+    </div>
+
+    <p id="response"></p>
+  </div>
 </div>
 
 <script>
-/* Tune these if you want:
-   - BIGGER images: increase IMG_WIDTH
-   - SLOWER: increase DURATION_MS and GAP_MS
-*/
-const TOTAL = 10;        // how many photos float by
-const GAP_MS = 600;      // time between each photo (bigger = slower sequence)
+const TOTAL = 10;
+const GAP_MS = 600;
 const DURATION_MS = 3400;
+const PHOTO_COUNT = 5;
+const NO_TEXTS = [
+  "No? Are you sure sure? 😅",
+  "The no button is feeling shy…",
+  "Plot twist: you meant yes 😌",
+  "No is currently on vacation 🏝️",
+  "Try again, cutie 💕"
+];
 
-document.getElementById("startBtn").addEventListener("click", start, { once:true });
+const startBtn = document.getElementById("startBtn");
+const startWrap = document.getElementById("startWrap");
+const question = document.getElementById("question");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const response = document.getElementById("response");
+let noCount = 0;
+
+preloadPhotos();
+startBtn.addEventListener("click", start, { once:true });
+noBtn.addEventListener("mouseenter", dodgeNo);
+noBtn.addEventListener("click", dodgeNo);
+yesBtn.addEventListener("click", sayYes);
+
+function preloadPhotos(){
+  for (let i = 1; i <= PHOTO_COUNT; i++) {
+    const img = new Image();
+    img.src = `pic${i}.jpg`;
+  }
+}
 
 function start(){
-  document.getElementById("startBtn").style.display = "none";
+  startWrap.style.display = "none";
 
   let i = 0;
   const timer = setInterval(() => {
@@ -97,38 +247,78 @@ function start(){
     i++;
     if (i >= TOTAL) {
       clearInterval(timer);
-      // show question after the last photo has had a moment
       setTimeout(() => {
-        document.getElementById("question").style.display = "block";
+        question.style.display = "block";
       }, 900);
     }
   }, GAP_MS);
+
+  spawnOne(i);
 }
 
 function spawnOne(i){
   const img = document.createElement("img");
-  img.src = "pic" + ((i % 5) + 1) + ".jpg";
+  img.src = `pic${(i % PHOTO_COUNT) + 1}.jpg`;
+  img.alt = "Floating memory photo";
   img.className = "fly";
 
-  // Start near center so you can SEE it clearly
   const startX = window.innerWidth * 0.5;
   const startY = window.innerHeight * 0.48;
 
-  // Center the image around start point
-  img.style.left = (startX - 130) + "px";  // 130 = half of 260px width
-  img.style.top  = (startY - 90) + "px";
+  const halfWidth = Math.min(parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--photo-size")) || 260, window.innerWidth * 0.35) / 2;
+  img.style.left = `${startX - halfWidth}px`;
+  img.style.top = `${startY - 90}px`;
 
-  // Gentle outward drift (not insane distances)
-  const driftX = (Math.random() * 520 - 260);   // -260 to +260
-  const driftY = (Math.random() * 520 - 260);
+  const driftX = Math.random() * 520 - 260;
+  const driftY = Math.random() * 520 - 260;
 
-  img.style.setProperty("--x", driftX + "px");
-  img.style.setProperty("--y", driftY + "px");
+  img.style.setProperty("--x", `${driftX}px`);
+  img.style.setProperty("--y", `${driftY}px`);
 
   document.body.appendChild(img);
-
-  // Cleanup
   setTimeout(() => img.remove(), DURATION_MS + 100);
+}
+
+function dodgeNo(){
+  noCount++;
+  response.textContent = NO_TEXTS[(noCount - 1) % NO_TEXTS.length];
+  response.classList.remove("shake");
+  void response.offsetWidth;
+  response.classList.add("shake");
+
+  const maxX = Math.max(window.innerWidth - noBtn.offsetWidth - 20, 20);
+  const maxY = Math.max(window.innerHeight - noBtn.offsetHeight - 20, 20);
+  noBtn.style.position = "fixed";
+  noBtn.style.left = `${Math.random() * (maxX - 20) + 10}px`;
+  noBtn.style.top = `${Math.random() * (maxY - 20) + 10}px`;
+}
+
+function sayYes(){
+  response.textContent = "YAYYY! Best decision ever 🥹💘";
+  noBtn.style.display = "none";
+  yesBtn.textContent = "My Valentine ✅";
+  yesBtn.disabled = true;
+  yesBtn.style.opacity = ".9";
+
+  for (let i = 0; i < 16; i++) {
+    setTimeout(() => burstHeart(), i * 90);
+  }
+}
+
+function burstHeart(){
+  const heart = document.createElement("span");
+  heart.className = "heart-burst";
+  heart.textContent = ["💖", "💘", "💞", "❤️"][Math.floor(Math.random() * 4)];
+
+  const x = window.innerWidth * (0.3 + Math.random() * 0.4);
+  const y = window.innerHeight * (0.25 + Math.random() * 0.4);
+  heart.style.left = `${x}px`;
+  heart.style.top = `${y}px`;
+  heart.style.setProperty("--tx", `${(Math.random() * 220) - 110}px`);
+  heart.style.setProperty("--ty", `${-120 - Math.random() * 140}px`);
+
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 1250);
 }
 </script>
 
