@@ -1,216 +1,365 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>💘</title>
-
-<style>
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-    background:#fff;
-    display:grid;
-    place-items:center;
-  }
-
-  .container{
-    width:min(520px, 92vw);
-    text-align:center;
-    padding:22px;
-  }
-
-  .btnStart{
-    border:none;
-    background:#111;
-    color:#fff;
-    font-weight:700;
-    font-size:18px;
-    padding:14px 18px;
-    border-radius:14px;
-  }
-  .btnStart:active{ transform:scale(.98); }
-
-  .frame{
-    margin:18px auto 0;
-    width:min(420px, 90vw);
-    aspect-ratio: 4 / 5;
-    border-radius:22px;
-    overflow:hidden;
-    background:#f3f3f3;
-    box-shadow:0 18px 50px rgba(0,0,0,.12);
-    position:relative;
-  }
-
-  .photo{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    opacity:0;
-    transform:scale(1.02);
-    transition: opacity 900ms ease, transform 1200ms ease;
-  }
-  .photo.show{
-    opacity:1;
-    transform:scale(1);
-  }
-  .photo.fadeOut{
-    opacity:0;
-    transform:scale(1.02);
-  }
-
-  .final{
-    display:none;
-    margin-top:18px;
-  }
-  .question{
-    margin:18px 0 14px;
-    font-size:34px;
-    line-height:1.1;
-    font-weight:800;
-    letter-spacing:-.4px;
-    color:#111;
-  }
-
-  .me{
-    width:min(320px, 80vw);
-    border-radius:22px;
-    box-shadow:0 18px 50px rgba(0,0,0,.12);
-    margin:10px auto 18px;
-    display:block;
-  }
-
-  .row{
-    display:flex;
-    gap:12px;
-    justify-content:center;
-  }
-  .choice{
-    border:none;
-    border-radius:14px;
-    padding:14px 18px;
-    font-size:18px;
-    font-weight:800;
-    min-width:120px;
-  }
-  .yes{ background:#16a34a; color:#fff; }
-  .no{ background:#ef4444; color:#fff; }
-
-  .result{
-    margin-top:14px;
-    font-size:18px;
-    font-weight:700;
-    color:#111;
-    min-height:24px;
-  }
-
-  .hint{
-    margin-top:10px;
-    font-size:13px;
-    color:#666;
-  }
-</style>
-</head>
-
-<body>
-  <div class="container">
-    <button id="start" class="btnStart">Hardik wants you to click here 💘</button>
-    <div class="hint" id="hint">make sure your images are named pic1.jpg … pic5.jpg and me.jpg</div>
-
-    <div class="frame" id="frame" aria-label="slideshow frame">
-      <img id="img" class="photo" alt="memory">
-    </div>
-
-    <div class="final" id="final">
-      <div class="question">Will you be my Valentine?</div>
-      <img class="me" src="me.jpg" alt="Hardik">
-
-      <div class="row">
-        <button id="yesBtn" class="choice yes">Yes</button>
-        <button id="noBtn" class="choice no">No</button>
-      </div>
-
-      <div class="result" id="result"></div>
-    </div>
-  </div>
-
-<script>
-  const pics = ["pic1.jpg","pic2.jpg","pic3.jpg","pic4.jpg","pic5.jpg"];
-  const img = document.getElementById("img");
-  const startBtn = document.getElementById("start");
-  const hint = document.getElementById("hint");
-  const final = document.getElementById("final");
-  const result = document.getElementById("result");
-
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn  = document.getElementById("noBtn");
-
-  // timings (ms): fade in/out + pause
-  const fadeIn  = 900;
-  const hold    = 1200;
-  const fadeOut = 900;
-
-  function preload(list){
-    return Promise.all(list.map(src => new Promise(res=>{
-      const im = new Image();
-      im.onload = () => res(true);
-      im.onerror = () => res(true);
-      im.src = src;
-    })));
-  }
-
-  function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
-
-  async function play(){
-    startBtn.disabled = true;
-    startBtn.textContent = "Loading…";
-    hint.style.display = "none";
-
-    await preload([...pics, "me.jpg"]);
-
-    startBtn.style.display = "none";
-
-    for(const src of pics){
-      img.src = src;
-
-      // fade in
-      img.classList.remove("fadeOut");
-      await sleep(40);
-      img.classList.add("show");
-      await sleep(fadeIn + hold);
-
-      // fade out
-      img.classList.add("fadeOut");
-      img.classList.remove("show");
-      await sleep(fadeOut);
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Valentine Story 💖</title>
+  <style>
+    :root {
+      --bg-1: #fff1f6;
+      --bg-2: #ffe4ec;
+      --rose: #e11d48;
+      --rose-dark: #be123c;
+      --gold: #f59e0b;
+      --ink: #1f2937;
+      --card: rgba(255, 255, 255, 0.72);
+      --shadow: 0 20px 60px rgba(190, 24, 93, 0.18);
     }
 
-    // final screen
-    final.style.display = "block";
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  startBtn.addEventListener("click", play);
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 20%, #ffd6e5 0 18%, transparent 19%),
+        radial-gradient(circle at 90% 10%, #ffd0e1 0 14%, transparent 15%),
+        radial-gradient(circle at 80% 90%, #ffe1ed 0 22%, transparent 23%),
+        linear-gradient(145deg, var(--bg-1), var(--bg-2));
+      overflow-x: hidden;
+    }
 
-  function accept(){
-    result.textContent = "Yay 💘 See you on Valentine’s 🙂";
-    // optionally disable after
-    yesBtn.disabled = true;
-    noBtn.disabled = true;
-    noBtn.textContent = "Yes";
-    noBtn.className = "choice yes";
-  }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.8) 0 1px, transparent 2px),
+        radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.8) 0 1px, transparent 2px),
+        radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.8) 0 1px, transparent 2px);
+      background-size: 220px 220px;
+      opacity: 0.55;
+    }
 
-  yesBtn.addEventListener("click", accept);
+    .page {
+      width: min(1000px, 92vw);
+      margin: 32px auto;
+      padding: clamp(18px, 3vw, 32px);
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
 
-  // “No” becomes “Yes”
-  noBtn.addEventListener("click", () => {
-    noBtn.textContent = "Yes";
-    noBtn.className = "choice yes";
-    accept();
-  });
-</script>
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(225, 29, 72, 0.12);
+      color: var(--rose-dark);
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      text-align: center;
+      max-width: 740px;
+      margin: 18px auto 30px;
+    }
+
+    h1 {
+      margin: 14px 0 8px;
+      font-size: clamp(2rem, 4.2vw, 3.2rem);
+      line-height: 1.1;
+      color: #881337;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      color: #831843;
+      opacity: 0.9;
+    }
+
+    .start-wrap {
+      text-align: center;
+      margin: 10px 0 26px;
+    }
+
+    .start-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 30px;
+      font-size: 1.03rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      background: linear-gradient(120deg, var(--rose), #fb7185);
+      box-shadow: 0 10px 22px rgba(225, 29, 72, 0.35);
+      transition: transform 220ms ease, box-shadow 220ms ease, filter 220ms ease;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(225, 29, 72, 0.4);
+      filter: saturate(1.1);
+    }
+
+    .gallery {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      align-items: stretch;
+    }
+
+    .memory {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      min-height: 240px;
+      box-shadow: 0 12px 28px rgba(136, 19, 55, 0.22);
+      transform: translateY(30px) scale(0.98);
+      opacity: 0;
+      transition: transform 700ms ease, opacity 700ms ease;
+      background: #f8d4df;
+    }
+
+    .memory.show {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .memory img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .memory .label {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      background: rgba(17, 24, 39, 0.55);
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .memory.final-memory {
+      grid-column: 1 / -1;
+      min-height: clamp(300px, 48vw, 480px);
+      border: 3px solid rgba(245, 158, 11, 0.85);
+    }
+
+    .memory.final-memory::after {
+      content: "\2764";
+      position: absolute;
+      right: 14px;
+      top: 12px;
+      color: #fff;
+      font-size: 1.5rem;
+      text-shadow: 0 5px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    .question-panel {
+      display: none;
+      margin-top: 28px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(190, 24, 93, 0.2);
+      padding: clamp(18px, 3vw, 28px);
+      text-align: center;
+    }
+
+    .question {
+      margin: 0;
+      font-size: clamp(1.6rem, 3vw, 2.35rem);
+      color: #9f1239;
+      font-weight: 800;
+    }
+
+    .note {
+      margin: 10px auto 0;
+      max-width: 640px;
+      color: #6b2142;
+      font-size: 1rem;
+    }
+
+    .actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .choice {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 26px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 200ms ease, filter 200ms ease;
+    }
+
+    .choice:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    .choice.yes {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .choice.no {
+      background: #f43f5e;
+      color: #fff;
+    }
+
+    .response {
+      margin: 14px 0 0;
+      min-height: 28px;
+      font-weight: 700;
+      color: #831843;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        margin: 16px auto;
+      }
+
+      .memory {
+        min-height: 210px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="hero">
+      <span class="badge">For my favorite person ✨</span>
+      <h1>A little love story of us</h1>
+      <p class="subtitle">I made this with all my heart, one memory at a time.</p>
+    </div>
+
+    <div class="start-wrap">
+      <button id="startBtn" class="start-btn">Open our memories 💌</button>
+    </div>
+
+    <section class="gallery" id="gallery" aria-label="Valentine memory gallery"></section>
+
+    <section class="question-panel" id="questionPanel">
+      <h2 class="question">Will you be my Valentine? 💖</h2>
+      <p class="note">No matter what, thank you for being such a beautiful part of my life.</p>
+      <div class="actions">
+        <button id="yesBtn" class="choice yes">Yes, of course! 💘</button>
+        <button id="noBtn" class="choice no">Need one more hug first 🤗</button>
+      </div>
+      <p id="response" class="response"></p>
+    </section>
+  </main>
+
+  <script>
+    const photos = ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg"];
+    const gallery = document.getElementById("gallery");
+    const startBtn = document.getElementById("startBtn");
+    const questionPanel = document.getElementById("questionPanel");
+    const response = document.getElementById("response");
+
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+
+    function preload(srcList) {
+      return Promise.all(
+        srcList.map(
+          (src) =>
+            new Promise((resolve) => {
+              const img = new Image();
+              img.onload = () => resolve(true);
+              img.onerror = () => resolve(true);
+              img.src = src;
+            })
+        )
+      );
+    }
+
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    function createCard(src, index, isFinal) {
+      const card = document.createElement("article");
+      card.className = `memory${isFinal ? " final-memory" : ""}`;
+
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = isFinal
+        ? "Final memory: asking will you be my Valentine"
+        : `Memory ${index + 1}`;
+
+      const label = document.createElement("span");
+      label.className = "label";
+      label.textContent = isFinal ? "The Big Question" : `Memory ${index + 1}`;
+
+      card.append(image, label);
+      return card;
+    }
+
+    async function revealMemories() {
+      startBtn.disabled = true;
+      startBtn.textContent = "Loading memories...";
+
+      await preload(photos);
+
+      startBtn.style.display = "none";
+      gallery.innerHTML = "";
+
+      for (const [index, src] of photos.entries()) {
+        const isFinal = index === photos.length - 1;
+        const card = createCard(src, index, isFinal);
+        gallery.appendChild(card);
+
+        await wait(120);
+        card.classList.add("show");
+        await wait(isFinal ? 400 : 280);
+      }
+
+      questionPanel.style.display = "block";
+      questionPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function celebrate() {
+      response.textContent = "Yay! You just made me the happiest person ever 💞";
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+      noBtn.textContent = "Best Valentine Ever 💗";
+      noBtn.classList.remove("no");
+      noBtn.classList.add("yes");
+    }
+
+    startBtn.addEventListener("click", revealMemories);
+    yesBtn.addEventListener("click", celebrate);
+    noBtn.addEventListener("click", () => {
+      response.textContent = "Deal 🤗 Sending you unlimited hugs first!";
+      setTimeout(celebrate, 800);
+    });
+  </script>
 </body>
 </html>
