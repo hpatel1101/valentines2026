@@ -1,230 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine?</title>
-
-<style>
-  :root{
-    --pink-bg:#ffb6c1;
-    --btn:#ff2e63;
-    --text:#1a1a1a;
-    --photo-size:260px;
-    --photo-radius:18px;
-    --soft-shadow:0 14px 30px rgba(0,0,0,.22);
-  }
-
-  *{ box-sizing:border-box; }
-
-  body{
-    margin:0;
-    min-height:100vh;
-    font-family:-apple-system, BlinkMacSystemFont, "Apple Color Emoji","Segoe UI Emoji", sans-serif;
-    background:radial-gradient(circle at 50% -15%, #ffd6e0 0%, var(--pink-bg) 45%, #ff9fb4 100%);
-    text-align:center;
-    overflow:hidden;
-    color:var(--text);
-  }
-
-  #startWrap{
-    min-height:100vh;
-    display:grid;
-    place-items:center;
-    padding:24px;
-  }
-
-  #startBtn{
-    padding:20px 28px;
-    font-size:clamp(1.05rem, 2.5vw, 1.35rem);
-    font-weight:700;
-    border:none;
-    border-radius:16px;
-    background:var(--btn);
-    color:#fff;
-    box-shadow:0 10px 24px rgba(255,46,99,.35);
-    cursor:pointer;
-    transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
-  }
-
-  #startBtn:hover{
-    transform:translateY(-1px) scale(1.01);
-    box-shadow:0 14px 30px rgba(255,46,99,.42);
-    filter:saturate(1.05);
-  }
-
-  #startBtn:active{ transform:translateY(1px) scale(0.99); }
-  #startBtn:focus-visible{ outline:3px solid #fff; outline-offset:4px; }
-
-  .fly{
-    position:absolute;
-    width:var(--photo-size);
-    max-width:70vw;
-    height:auto;
-    border-radius:var(--photo-radius);
-    box-shadow:var(--soft-shadow);
-    opacity:0;
-    transform:translate(0,0) scale(.98);
-    will-change:transform, opacity;
-    animation:driftAway 3.4s ease-in-out forwards;
-  }
-
-  @keyframes driftAway{
-    0%   { opacity:0; transform:translate(0,0) scale(.98); }
-    12%  { opacity:1; transform:translate(0,0) scale(1); }
-    85%  { opacity:1; transform:translate(var(--x), var(--y)) scale(1); }
-    100% { opacity:0; transform:translate(var(--x), var(--y)) scale(.98); }
-  }
-
-  #question{
-    display:none;
-    min-height:100vh;
-    padding:18vh 18px 40px;
-  }
-
-  h1{
-    margin:0;
-    font-size:clamp(2rem, 5vw, 2.45rem);
-    line-height:1.2;
-    text-shadow:0 2px 0 rgba(255,255,255,.25);
-  }
-
-  #me{
-    width:min(250px, 72vw);
-    border-radius:22px;
-    margin-top:18px;
-    box-shadow:var(--soft-shadow);
-  }
-
-  #hint{
-    margin:12px 0 0;
-    font-size:.96rem;
-    opacity:.78;
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .fly{ animation-duration:1ms; }
-    #startBtn{ transition:none; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hardik & Vaidehi | Engagement Celebration</title>
+  <meta name="description" content="Celebrate Hardik and Vaidehi's engagement. View details, travel info, schedule, FAQs, and RSVP online." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top">H & V</a>
+      <nav class="nav">
+        <a href="#details">Details</a>
+        <a href="#schedule">Schedule</a>
+        <a href="#travel">Travel</a>
+        <a href="#faq">FAQ</a>
+        <a class="nav-cta" href="#rsvp">RSVP</a>
+      </nav>
+    </div>
+  </header>
 
-<div id="startWrap">
-  <button id="startBtn" aria-describedby="hint">Hardik wants you to click here ❤️</button>
-  <p id="hint"></p>
-</div>
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Engagement Celebration</p>
+          <h1>Hardik <span>&</span> Vaidehi</h1>
+          <p class="hero-text">
+            We’re so excited to celebrate with our favorite people. Find the weekend details,
+            travel notes, and RSVP information all in one place.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#rsvp">RSVP now</a>
+            <a class="button secondary" href="#details">See details</a>
+          </div>
+        </div>
+        <div class="hero-card card soft-gradient">
+          <p class="label">Save the date</p>
+          <h2>Saturday, September 20, 2026</h2>
+          <p>6:00 PM onward</p>
+          <p>The Grand Terrace<br />Jersey City, New Jersey</p>
+          <p class="small-note">Formal festive attire encouraged</p>
+        </div>
+      </div>
+    </section>
 
-<div id="question" aria-live="polite">
-  <h1>Will you be my Valentine? 💘</h1>
-  <img id="me" src="me.jpg" alt="Photo of me smiling">
-</div>
+    <section id="details" class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">The celebration</p>
+          <h2>Everything you need for the weekend</h2>
+        </div>
+        <div class="grid three-up">
+          <article class="card">
+            <p class="label">When</p>
+            <h3>Saturday, September 20</h3>
+            <p>Guests arrive at 5:30 PM. Ceremony of blessings begins at 6:00 PM, followed by dinner, dancing, and dessert.</p>
+          </article>
+          <article class="card">
+            <p class="label">Where</p>
+            <h3>The Grand Terrace</h3>
+            <p>123 Celebration Avenue<br />Jersey City, NJ 07302</p>
+            <p><a href="https://maps.google.com/?q=Jersey+City+NJ" target="_blank" rel="noreferrer">Open directions</a></p>
+          </article>
+          <article class="card">
+            <p class="label">Attire</p>
+            <h3>Festive formal</h3>
+            <p>We’d love colorful cocktail attire, jewel tones, and outfits that feel celebratory and comfortable for dancing.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<script>
-const TOTAL = 10;
-const GAP_MS = 600;
-const DURATION_MS = 3400;
-const PHOTO_COUNT = 5;
+    <section id="schedule" class="section alt">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Schedule</p>
+          <h2>A relaxed evening with the people we love most</h2>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span>5:30 PM</span>
+            <div>
+              <h3>Arrival & welcome drinks</h3>
+              <p>Enjoy light bites, cocktails, and time to settle in before the festivities begin.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span>6:00 PM</span>
+            <div>
+              <h3>Family blessings</h3>
+              <p>A short ceremony and ring exchange with immediate family and friends.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span>7:00 PM</span>
+            <div>
+              <h3>Dinner service</h3>
+              <p>Buffet dinner with vegetarian and non-vegetarian options.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span>8:30 PM</span>
+            <div>
+              <h3>Toasts, music, and dancing</h3>
+              <p>Bring your best energy. Song requests are welcome in the RSVP form.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-const startBtn = document.getElementById("startBtn");
-const startWrap = document.getElementById("startWrap");
-const question = document.getElementById("question");
+    <section id="travel" class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Travel</p>
+          <h2>Hotel blocks, airport notes, and getting around</h2>
+        </div>
+        <div class="grid two-up">
+          <article class="card">
+            <h3>Where to stay</h3>
+            <p>We recommend staying in Jersey City or lower Manhattan for easy access to the venue. A room block can be added here later with a booking link and cutoff date.</p>
+          </article>
+          <article class="card">
+            <h3>Transportation</h3>
+            <p>Newark Liberty is the closest airport. Rideshare is easiest, and limited on-site parking will be available for guests driving in.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-preloadPhotos();
-startBtn.addEventListener("click", start, { once:true });
+    <section id="faq" class="section alt">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">FAQ</p>
+          <h2>A few helpful notes</h2>
+        </div>
+        <div class="faq-list">
+          <details class="card">
+            <summary>Can I bring a guest?</summary>
+            <p>Your RSVP page will show your party size if a plus-one or family members are included in your invitation.</p>
+          </details>
+          <details class="card">
+            <summary>Can I bring children?</summary>
+            <p>Please follow the guest count listed in your RSVP invitation. If you need help, reach out directly and we’ll do our best.</p>
+          </details>
+          <details class="card">
+            <summary>What food will be served?</summary>
+            <p>We’ll have vegetarian and non-vegetarian options. Use the RSVP form to share dietary notes.</p>
+          </details>
+          <details class="card">
+            <summary>When should I RSVP by?</summary>
+            <p>Please RSVP by August 15, 2026 so we can finalize seating and catering.</p>
+          </details>
+        </div>
+      </div>
+    </section>
 
-function preloadPhotos(){
-  for (let i = 1; i <= PHOTO_COUNT; i++) {
-    const img = new Image();
-    img.src = `pic${i}.jpg`;
-  }
-}
+    <section id="rsvp" class="section">
+      <div class="container narrow">
+        <div class="section-heading center">
+          <p class="eyebrow">RSVP</p>
+          <h2>Find your invitation</h2>
+          <p>Enter the invite code from your card. Once found, you can respond for your household or party.</p>
+        </div>
 
-function start(){
-  startWrap.style.display = "none";
+        <div class="card rsvp-shell">
+          <form id="lookupForm" class="lookup-form">
+            <label for="inviteCode">Invite code</label>
+            <div class="lookup-row">
+              <input id="inviteCode" name="inviteCode" type="text" placeholder="Example: PATEL01" autocomplete="off" required />
+              <button type="submit" class="button primary">Find RSVP</button>
+            </div>
+            <p id="lookupMessage" class="form-message" aria-live="polite"></p>
+          </form>
 
-  let i = 0;
-  const timer = setInterval(() => {
-    spawnOne(i);
-    i++;
-    if (i >= TOTAL) {
-      clearInterval(timer);
-      setTimeout(() => {
-        question.style.display = "block";
-      }, 900);
-    }
-  }, GAP_MS);
+          <div id="partyCard" class="party-card hidden">
+            <div class="party-header">
+              <div>
+                <p class="label">Invitation found</p>
+                <h3 id="partyName"></h3>
+                <p id="partyGuests"></p>
+              </div>
+              <span id="partySizeBadge" class="badge"></span>
+            </div>
 
-  spawnOne(i);
-  i++;
-}
+            <form id="rsvpForm" class="rsvp-form">
+              <div class="field-group">
+                <label>Will your party attend?</label>
+                <div class="radio-row">
+                  <label><input type="radio" name="attendance" value="accept" required /> Joyfully accepts</label>
+                  <label><input type="radio" name="attendance" value="decline" required /> Regretfully declines</label>
+                </div>
+              </div>
 
-function spawnOne(i){
-  const img = document.createElement("img");
-  img.src = `pic${(i % PHOTO_COUNT) + 1}.jpg`;
-  img.alt = "Floating memory photo";
-  img.className = "fly";
+              <div class="grid two-up compact">
+                <div>
+                  <label for="guestCount">How many guests?</label>
+                  <select id="guestCount" name="guestCount"></select>
+                </div>
+                <div>
+                  <label for="mealChoice">Meal preference</label>
+                  <select id="mealChoice" name="mealChoice"></select>
+                </div>
+              </div>
 
-  const startX = window.innerWidth * 0.5;
-  const startY = window.innerHeight * 0.48;
+              <div class="grid two-up compact">
+                <div>
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" placeholder="you@example.com" />
+                </div>
+                <div>
+                  <label for="phone">Phone</label>
+                  <input id="phone" name="phone" type="tel" placeholder="Optional" />
+                </div>
+              </div>
 
-  const halfWidth = Math.min(parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--photo-size")) || 260, window.innerWidth * 0.35) / 2;
-  img.style.left = `${startX - halfWidth}px`;
-  img.style.top = `${startY - 90}px`;
+              <div>
+                <label for="songRequest">Song request</label>
+                <input id="songRequest" name="songRequest" type="text" placeholder="Optional" />
+              </div>
 
-  const driftX = Math.random() * 520 - 260;
-  const driftY = Math.random() * 520 - 260;
+              <div>
+                <label for="notes">Dietary notes or message for us</label>
+                <textarea id="notes" name="notes" rows="4" placeholder="Optional"></textarea>
+              </div>
 
-  img.style.setProperty("--x", `${driftX}px`);
-  img.style.setProperty("--y", `${driftY}px`);
+              <button type="submit" class="button primary full-width">Submit RSVP</button>
+              <p id="rsvpMessage" class="form-message" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  document.body.appendChild(img);
-  setTimeout(() => img.remove(), DURATION_MS + 100);
-}
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <p>Made with love for Hardik & Vaidehi.</p>
+      <p class="small-note">Questions? Add your contact details in the footer or README after setup.</p>
+    </div>
+  </footer>
 
-function dodgeNo(){
-  noCount++;
-  response.textContent = NO_TEXTS[(noCount - 1) % NO_TEXTS.length];
-  response.classList.remove("shake");
-  void response.offsetWidth;
-  response.classList.add("shake");
-
-  const maxX = Math.max(window.innerWidth - noBtn.offsetWidth - 20, 20);
-  const maxY = Math.max(window.innerHeight - noBtn.offsetHeight - 20, 20);
-  noBtn.style.position = "fixed";
-  noBtn.style.left = `${Math.random() * (maxX - 20) + 10}px`;
-  noBtn.style.top = `${Math.random() * (maxY - 20) + 10}px`;
-}
-
-function sayYes(){
-  response.textContent = "YAYYY! Best decision ever 🥹💘";
-  noBtn.style.display = "none";
-  yesBtn.textContent = "My Valentine ✅";
-  yesBtn.disabled = true;
-  yesBtn.style.opacity = ".9";
-
-  for (let i = 0; i < 16; i++) {
-    setTimeout(() => burstHeart(), i * 90);
-  }
-}
-
-function burstHeart(){
-  const heart = document.createElement("span");
-  heart.className = "heart-burst";
-  heart.textContent = ["💖", "💘", "💞", "❤️"][Math.floor(Math.random() * 4)];
-
-  const x = window.innerWidth * (0.3 + Math.random() * 0.4);
-  const y = window.innerHeight * (0.25 + Math.random() * 0.4);
-  heart.style.left = `${x}px`;
-  heart.style.top = `${y}px`;
-  heart.style.setProperty("--tx", `${(Math.random() * 220) - 110}px`);
-  heart.style.setProperty("--ty", `${-120 - Math.random() * 140}px`);
-
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 1250);
-}
-</script>
-
+  <script src="app.js"></script>
 </body>
 </html>

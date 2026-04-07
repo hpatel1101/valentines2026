@@ -1,0 +1,7 @@
+invite_code,party_name,guest_name,email,allowed_plus_ones,max_party_size,meal_options
+PATEL01,Patel Family,Hardik Patel,hardik@example.com,1,2,Vegetarian|Chicken|Fish
+PATEL01,Patel Family,Vaidehi Shah,vaidehi@example.com,1,2,Vegetarian|Chicken|Fish
+SHAH02,Shah Family,Riya Shah,riya@example.com,0,3,Vegetarian|Chicken
+SHAH02,Shah Family,Amit Shah,amit@example.com,0,3,Vegetarian|Chicken
+SHAH02,Shah Family,Neha Shah,neha@example.com,0,3,Vegetarian|Chicken
+FRIEND03,Friends Table,Alex Johnson,alex@example.com,1,2,Vegetarian|Chicken|Fish
