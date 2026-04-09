@@ -16,6 +16,7 @@ export default function Page() {
 
   function chooseParty(selectedParty) {
     setParty(selectedParty);
+    setMatches([]);
     setStatuses(Object.fromEntries(selectedParty.members.map((m) => [m.id, m.attending || ''])));
     setSubmitError('');
     setSubmitMessage('');
@@ -176,7 +177,7 @@ export default function Page() {
               {lookupError ? <p className="message error">{lookupError}</p> : null}
             </form>
 
-            {matches.length > 1 ? (
+            {matches.length > 1 && !party ? (
               <div className="match-list">
                 {matches.map((match, index) => (
                   <button
