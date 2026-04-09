@@ -135,7 +135,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="section" id="rsvp">
+      <section className="section muted-section" id="rsvp">
         <div className="container narrow">
           <div className="section-heading center">
             <p className="eyebrow">RSVP</p>
