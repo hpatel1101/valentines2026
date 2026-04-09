@@ -80,7 +80,7 @@ main { min-height: 100vh; }
   background: var(--surface);
 }
 .hero-image-placeholder {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 1.2;
   border: 1px solid var(--line);
   background: #e9e0d8;
   overflow: hidden;
