@@ -89,6 +89,18 @@ export default function Page() {
 
   return (
     <main>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap');
+
+        .names {
+          font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+          font-size: clamp(3.2rem, 7vw, 5rem);
+          font-weight: 300;
+          letter-spacing: 0.03em;
+          text-transform: none;
+          line-height: 0.95;
+        }
+      `}</style>
       <header className="site-header">
         <div className="container header-inner">
           <div className="crest">H &amp; V</div>
