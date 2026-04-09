@@ -117,7 +117,8 @@ export default function Page() {
           <div className="section-heading center">
             <p className="eyebrow">Details</p>
             <h2>Saturday, August 8, 2026</h2>
-            <p>5:00 PM · Cartersville, Georgia</p>
+            <p>5:00 PM · Clarence Brown Conference Center</p>
+            <p>5450 GA-20, Cartersville, GA 30121</p>
           </div>
         </div>
       </section>
@@ -128,7 +129,7 @@ export default function Page() {
             <p className="eyebrow">Schedule</p>
           </div>
           <div className="timeline-simple">
-            <div className="timeline-row"><span>4:30 PM</span><p>Guest arrival</p></div>
+            <div className="timeline-row"><span>4:30 PM</span><p>Guest arrival · Clarence Brown Conference Center</p></div>
             <div className="timeline-row"><span>5:00 PM</span><p>Celebration begins</p></div>
             <div className="timeline-row"><span>6:00 PM</span><p>Dinner</p></div>
             <div className="timeline-row"><span>7:30 PM</span><p>Music and dancing</p></div>
