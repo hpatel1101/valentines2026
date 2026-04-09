@@ -106,7 +106,7 @@ export default function Page() {
         <div className="container">
           <div className="hero-image-card">
             <div className="hero-image-placeholder">
-              <div className="hero-image-text">Hardik &amp; Vaidehi</div>
+              <img className="hero-image" src="/engaged_pic.jpg" alt="Hardik and Vaidehi engagement portrait" />
             </div>
           </div>
         </div>
