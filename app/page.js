@@ -213,6 +213,7 @@ export default function Page() {
             <h2>Saturday, August 8, 2026</h2>
             <p>5:00 PM · Clarence Brown Conference Center</p>
             <p>5450 GA-20, Cartersville, GA 30121</p>
+            <p>Dress code: Indian Traditional</p>
           </div>
         </div>
       </section>
