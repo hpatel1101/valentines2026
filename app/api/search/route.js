@@ -129,6 +129,7 @@ export async function GET(request) {
 
     const parties = Array.from(partyMap.values())
       .sort((a, b) => b.score - a.score || a.partyName.localeCompare(b.partyName))
+      .slice(0, 7)
       .map(({ score, ...party }) => party);
 
     return NextResponse.json({ parties });
